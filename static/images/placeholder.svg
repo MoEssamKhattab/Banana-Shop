@@ -1,0 +1,6 @@
+<!-- Placeholder SVG -->
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#f5f5f5"/>
+  <text x="150" y="140" text-anchor="middle" font-family="Arial" font-size="14" fill="#999">No Image</text>
+  <text x="150" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="#999">Available</text>
+</svg>

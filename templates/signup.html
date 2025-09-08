@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Banana Fashion Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">BANANA</a>
+            <ul class="nav-links">
+                <li><a href="/men">Men</a></li>
+                <li><a href="/women">Women</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="/login" class="btn">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="section">
+            <div class="form-container" style="max-width: 500px;">
+                <h1 class="form-title">Create Your Account</h1>
+                <p class="form-subtitle">Join Banana Fashion Store and discover minimalistic style</p>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-input" required>
+                        <div id="passwordStrength" class="password-strength hidden"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country" class="form-label">Country</label>
+                        <select id="country" name="country" class="form-select" required>
+                            <option value="">Select your country</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select id="gender" name="gender" class="form-select" required>
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image" class="form-label">Profile Image (Optional)</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="image" name="image" class="form-input file-input" accept="image/*">
+                            <div class="file-upload-preview" id="imagePreview" style="display: none;">
+                                <img id="previewImg" src="" alt="Preview" style="max-width: 100px; max-height: 100px; border-radius: 50%; object-fit: cover;">
+                                <span class="file-name" id="fileName"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                </form>
+                
+                <p style="text-align: center; margin-top: 2rem; color: #666;">
+                    Already have an account? <a href="/login" style="color: #333; text-decoration: underline;">Login here</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Banana Fashion Store. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        let passwordStrengthTimeout;
+        
+        // Load countries on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await API.get('/auth/countries');
+                const countrySelect = document.getElementById('country');
+                
+                response.countries.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    countrySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading countries:', error);
+            }
+        });
+
+        // Image preview functionality
+        document.getElementById('image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            const fileName = document.getElementById('fileName');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    fileName.textContent = file.name;
+                    preview.style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Password strength checking
+        document.getElementById('password').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            
+            if (!password) {
+                strengthDiv.classList.add('hidden');
+                return;
+            }
+            
+            // Debounce the API call
+            clearTimeout(passwordStrengthTimeout);
+            passwordStrengthTimeout = setTimeout(async () => {
+                try {
+                    const strength = await checkPasswordStrength(password);
+                    if (strength) {
+                        strengthDiv.classList.remove('hidden');
+                        strengthDiv.className = `password-strength strength-${strength.strength.toLowerCase().replace(' ', '-')}`;
+                        strengthDiv.innerHTML = `
+                            <div><strong>Strength:</strong> ${strength.strength}</div>
+                            ${strength.feedback.length > 0 ? `<div><strong>Suggestions:</strong> ${strength.feedback.join(', ')}</div>` : ''}
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Error checking password strength:', error);
+                }
+            }, 300);
+        });
+
+        // Form submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('country', document.getElementById('country').value);
+            formData.append('gender', document.getElementById('gender').value);
+            
+            // Handle image upload
+            const imageInput = document.getElementById('image');
+            if (imageInput.files.length > 0) {
+                formData.append('profile_image', imageInput.files[0]);
+            }
+            
+            // Validate form
+            if (!FormValidator.validateRequired(formData.get('name'))) {
+                UI.showAlert('Name is required');
+                return;
+            }
+            
+            if (!FormValidator.validateEmail(formData.get('email'))) {
+                UI.showAlert('Please enter a valid email address');
+                return;
+            }
+            
+            if (!FormValidator.validatePassword(formData.get('password'))) {
+                UI.showAlert('Password must be at least 8 characters long');
+                return;
+            }
+            
+            if (!FormValidator.validateRequired(formData.get('country'))) {
+                UI.showAlert('Please select your country');
+                return;
+            }
+            
+            if (!FormValidator.validateRequired(formData.get('gender'))) {
+                UI.showAlert('Please select your gender');
+                return;
+            }
+            
+            try {
+                UI.showLoading(submitBtn);
+                
+                // Use fetch directly for FormData
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Signup failed');
+                }
+                
+                const data = await response.json();
+                
+                // Store the token and user data for auto-login
+                Auth.setToken(data.access_token);
+                Auth.setUser(data.user);
+                
+                UI.showAlert('Account created successfully! Redirecting...', 'success');
+                
+                // Redirect to home page after a short delay
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+                
+            } catch (error) {
+                UI.showAlert(error.message || 'Signup failed');
+            } finally {
+                UI.hideLoading(submitBtn, originalText);
+            }
+        });
+
+        // Redirect if already logged in
+        if (Auth.isLoggedIn()) {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

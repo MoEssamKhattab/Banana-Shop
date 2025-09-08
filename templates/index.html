@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana - Fashion Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">BANANA</a>
+            <ul class="nav-links">
+                <li><a href="/men">Men</a></li>
+                <li><a href="/women">Women</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="/login" class="btn">Login</a>
+                <a href="/signup" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <div class="hero-slider">
+                <div class="slide active" style="background-image: url('/static/images/home/1.jpg')"></div>
+                <div class="slide" style="background-image: url('/static/images/home/2.jpg')"></div>
+                <div class="slide" style="background-image: url('/static/images/home/3.jpg')"></div>
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>BANANA</h1>
+                <p>Minimalistic Fashion for the Modern Individual</p>
+                <a href="/men" class="btn btn-primary">Shop Now</a>
+            </div>
+            <div class="slider-controls">
+                <button class="slider-btn prev" onclick="previousSlide()">‹</button>
+                <button class="slider-btn next" onclick="nextSlide()">›</button>
+            </div>
+            <div class="slider-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Featured Collections</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <div style="text-align: center; padding: 3rem; background: #f8f8f8; cursor: pointer;" onclick="window.location.href='/men'">
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem; font-weight: 300; letter-spacing: 2px;">MEN</h3>
+                    <p style="color: #666; margin-bottom: 2rem;">Discover our latest men's collection</p>
+                    <span class="btn">Shop Men</span>
+                </div>
+                <div style="text-align: center; padding: 3rem; background: #f0f0f0; cursor: pointer;" onclick="window.location.href='/women'">
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem; font-weight: 300; letter-spacing: 2px;">WOMEN</h3>
+                    <p style="color: #666; margin-bottom: 2rem;">Coming soon...</p>
+                    <span class="btn" style="opacity: 0.5;">Coming Soon</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Latest Products</h2>
+            <div class="product-grid" id="featured-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Banana Fashion Store. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load featured products (first 8 men's products)
+            try {
+                const products = await ProductManager.loadProducts('men');
+                const featuredProducts = products.slice(0, 8);
+                ProductManager.renderProductGrid(featuredProducts, 'featured-products');
+            } catch (error) {
+                console.error('Error loading featured products:', error);
+            }
+        });
+    </script>
+</body>
+</html>

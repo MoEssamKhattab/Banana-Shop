@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Banana Fashion Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">BANANA</a>
+            <ul class="nav-links">
+                <li><a href="/men">Men</a></li>
+                <li><a href="/women">Women</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="/signup" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="section">
+            <div class="form-container">
+                <h1 class="form-title">Welcome Back</h1>
+                <p class="form-subtitle">Sign in to your Banana Fashion Store account</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-input" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                
+                <p style="text-align: center; margin-top: 2rem; color: #666;">
+                    Don't have an account? <a href="/signup" style="color: #333; text-decoration: underline;">Sign up here</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Banana Fashion Store. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            const formData = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+            
+            // Validate form
+            if (!FormValidator.validateEmail(formData.email)) {
+                UI.showAlert('Please enter a valid email address');
+                return;
+            }
+            
+            if (!FormValidator.validateRequired(formData.password)) {
+                UI.showAlert('Password is required');
+                return;
+            }
+            
+            try {
+                UI.showLoading(submitBtn);
+                
+                const response = await API.post('/auth/login', formData);
+                
+                // Store token and user data, then redirect
+                Auth.setToken(response.access_token);
+                if (response.user) {
+                    Auth.setUser(response.user);
+                }
+                UI.showAlert('Login successful!', 'success');
+                
+                // Redirect to home page after a short delay
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+                
+            } catch (error) {
+                UI.showAlert(error.message || 'Login failed');
+            } finally {
+                UI.hideLoading(submitBtn, originalText);
+            }
+        });
+
+        // Redirect if already logged in
+        if (Auth.isLoggedIn()) {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

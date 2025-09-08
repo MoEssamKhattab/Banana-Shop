@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product - Banana Fashion Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">BANANA</a>
+            <ul class="nav-links">
+                <li><a href="/men">Men</a></li>
+                <li><a href="/women">Women</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="/login" class="btn">Login</a>
+                <a href="/signup" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="section">
+            <div style="margin-bottom: 2rem;">
+                <a href="/men" class="btn">← Back to Men's Collection</a>
+            </div>
+            
+            <div id="product-container">
+                <div style="text-align: center; padding: 4rem;">
+                    <div class="loading"></div>
+                    <p>Loading product...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Banana Fashion Store. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        let currentProduct = null;
+        let selectedSize = null;
+        let selectedColor = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const productId = getProductIdFromUrl();
+            if (productId) {
+                await loadProduct(productId);
+            } else {
+                showError('Product not found');
+            }
+        });
+
+        function getProductIdFromUrl() {
+            const pathParts = window.location.pathname.split('/');
+            return pathParts[pathParts.length - 1];
+        }
+
+        async function loadProduct(productId) {
+            try {
+                currentProduct = await ProductManager.getProduct(productId);
+                if (currentProduct) {
+                    renderProduct(currentProduct);
+                    
+                    // Setup personalized image for logged-in users
+                    if (Auth.isLoggedIn()) {
+                        const imageElement = document.getElementById(`product-detail-image-${currentProduct.id}`);
+                        if (imageElement) {
+                            ImageManager.setupPersonalizedImage(currentProduct.id, imageElement);
+                        }
+                    }
+                } else {
+                    showError('Product not found');
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showError('Failed to load product');
+            }
+        }
+
+        function renderProduct(product) {
+            document.title = `${product.name} - Banana Fashion Store`;
+            
+            const container = document.getElementById('product-container');
+            container.innerHTML = `
+                <div class="product-detail">
+                    <div style="position: relative;">
+                        <img src="${product.image}" 
+                             alt="${product.name}" 
+                             class="product-detail-image"
+                             id="product-detail-image-${product.id}"
+                             onerror="this.src='/static/images/placeholder.jpg'">
+                    </div>
+                    <div class="product-detail-info">
+                        <h1>${product.name}</h1>
+                        <div class="product-detail-price">$${product.price}</div>
+                        <div class="product-category" style="margin-bottom: 1rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">
+                            ${product.category}
+                        </div>
+                        <div class="product-detail-description">
+                            ${product.description}
+                        </div>
+                        
+                        ${product.sizes && product.sizes.length > 0 ? `
+                        <div class="size-selector">
+                            <h3 style="margin-bottom: 0.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Size</h3>
+                            <div class="size-options">
+                                ${product.sizes.map(size => `
+                                    <div class="size-option" onclick="selectSize('${size}')" data-size="${size}">
+                                        ${size}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${product.colors && product.colors.length > 0 ? `
+                        <div class="color-selector">
+                            <h3 style="margin-bottom: 0.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Color</h3>
+                            <div class="color-options">
+                                ${product.colors.map(color => `
+                                    <div class="color-option" onclick="selectColor('${color}')" data-color="${color}">
+                                        ${color}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;" onclick="addToCart()">
+                                Add to Cart
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                            <p>SKU: ${product.sku}</p>
+                            <p>Free shipping on orders over $100</p>
+                            <p>30-day return policy</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectSize(size) {
+            // Remove previous selection
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            document.querySelector(`[data-size="${size}"]`).classList.add('selected');
+            selectedSize = size;
+        }
+
+        function selectColor(color) {
+            // Remove previous selection
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            document.querySelector(`[data-color="${color}"]`).classList.add('selected');
+            selectedColor = color;
+        }
+
+        function addToCart() {
+            if (!currentProduct) return;
+            
+            // Check if size is required and selected
+            if (currentProduct.sizes && currentProduct.sizes.length > 0 && !selectedSize) {
+                UI.showAlert('Please select a size');
+                return;
+            }
+            
+            // Check if color is required and selected
+            if (currentProduct.colors && currentProduct.colors.length > 0 && !selectedColor) {
+                UI.showAlert('Please select a color');
+                return;
+            }
+            
+            // For now, just show a success message
+            // In a real app, you would add to cart functionality
+            UI.showAlert('Product added to cart!', 'success');
+            
+            // Log the cart item (for development)
+            const cartItem = {
+                product: currentProduct,
+                size: selectedSize,
+                color: selectedColor,
+                quantity: 1
+            };
+            console.log('Added to cart:', cartItem);
+        }
+
+        function showError(message) {
+            const container = document.getElementById('product-container');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 4rem;">
+                    <h2 style="color: #666; margin-bottom: 1rem;">${message}</h2>
+                    <a href="/men" class="btn">Back to Men's Collection</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

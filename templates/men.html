@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men - Banana Fashion Store</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">BANANA</a>
+            <ul class="nav-links">
+                <li><a href="/men" style="color: #000; border-bottom: 2px solid #000;">Men</a></li>
+                <li><a href="/women">Women</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="/login" class="btn">Login</a>
+                <a href="/signup" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="section">
+            <h1 class="section-title">Men's Collection</h1>
+            
+            <!-- Filter options -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn filter-btn active" data-category="">All</button>
+                    <button class="btn filter-btn" data-category="BLAZER">Blazers</button>
+                    <button class="btn filter-btn" data-category="CAMISA">Shirts</button>
+                    <button class="btn filter-btn" data-category="CAZADORA">Jackets</button>
+                    <button class="btn filter-btn" data-category="SOBRECAMISA">Overshirts</button>
+                </div>
+            </div>
+
+            <div class="product-grid" id="men-products">
+                <!-- Products will be loaded here -->
+            </div>
+            
+            <div id="loading" style="text-align: center; padding: 2rem;">
+                <div class="loading"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Banana Fashion Store. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        let allProducts = [];
+        let currentCategory = '';
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadProducts();
+            setupFilters();
+        });
+
+        async function loadProducts() {
+            try {
+                allProducts = await ProductManager.loadProducts('men');
+                filterProducts();
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: #666;">Failed to load products. Please try again later.</p>';
+            }
+        }
+
+        function setupFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter products
+                    currentCategory = this.dataset.category;
+                    filterProducts();
+                });
+            });
+        }
+
+        function filterProducts() {
+            let filteredProducts = allProducts;
+            
+            if (currentCategory) {
+                filteredProducts = allProducts.filter(product => 
+                    product.category.toLowerCase().includes(currentCategory.toLowerCase())
+                );
+            }
+            
+            ProductManager.renderProductGrid(filteredProducts, 'men-products');
+            
+            // Update count
+            const title = document.querySelector('.section-title');
+            if (currentCategory) {
+                title.textContent = `Men's ${currentCategory} (${filteredProducts.length})`;
+            } else {
+                title.textContent = `Men's Collection (${filteredProducts.length})`;
+            }
+        }
+    </script>
+
+    <style>
+        .filter-btn {
+            margin: 0.25rem;
+        }
+        
+        .filter-btn.active {
+            background: #333;
+            color: #fff;
+        }
+        
+        .nav-links a[style] {
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>

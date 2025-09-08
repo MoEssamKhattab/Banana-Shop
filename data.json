@@ -1,0 +1,103 @@
+{
+    "05788203528000": {
+        "name": "LIMITED EDITION DOUBLE-BREASTED SUIT BLAZER",
+        "price": "8,290",
+        "category": "BLAZER",
+        "image": "./static/products/05788203528-e1.jpg",
+        "description": "Blazer regular fit made of wool blend fabric. Featuring a peak lapel collar, long sleeves with buttoned cuffs, a chest welt pocket, jetted hip pockets, an inside pocket, two back vents and double-breasted button fastening.",
+        "sizes": [
+            "46",
+            "48",
+            "50",
+            "52",
+            "54"
+        ],
+        "colors": [
+            "Dark olive"
+        ]
+    },
+    "06861337800000": {
+        "name": "RELAXED FIT OVERSHIRT WITH POCKETS",
+        "price": "4,990",
+        "category": "SOBRECAMISA",
+        "image": "./static/products/06861337800-e1.jpg",
+        "description": "Relaxed fit overshirt made of a cotton, linen and lyocell blend. Featuring a lapel collar, long sleeves with buttoned cuffs, chest patch pockets and side pockets at the hip, and a button-up front.",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "Black"
+        ]
+    },
+    "00706663717000": {
+        "name": "RELAXED FIT FLOWING SHIRT",
+        "price": "2,990",
+        "category": "CAMISA",
+        "image": "./static/products/00706663717-e1.jpg",
+        "description": "Relaxed fit shirt made from a lyocell blend fabric. Featuring a camp collar and short sleeves. Hem with side vents. Button-up front hidden by a placket.",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "Chocolate",
+            "Black",
+            "Light beige"
+        ]
+    },
+    "07446307330000": {
+        "name": "FLORAL PRINT DENIM JACKET",
+        "price": "4,290",
+        "category": "CAZADORA",
+        "image": "./static/products/07446307330-e1.jpg",
+        "description": "Cropped fit jacket made of cotton denim. Featuring a lapel collar and long sleeves with buttoned cuffs. Welt pockets on the chest. Washed effect. Front button fastening hidden by a placket.",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "Multicoloured"
+        ]
+    },
+    "07446320600000": {
+        "name": "NCROPPED FIT JACKET",
+        "price": "4,290",
+        "category": "CAZADORA",
+        "image": "./static/products/07446320600-e1.jpg",
+        "description": "Cropped fit jacket made of cotton fabric. Featuring a lapel collar, long sleeve with buttoned cuffs, welt pockets on the chest and sides at the hip and a button-up front hidden by a placket.",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "Red"
+        ]
+    },
+    "04302340500000": {
+        "name": "EMBROIDERED ZIP-UP JACKET",
+        "price": "3,590",
+        "category": "CAZADORA",
+        "image": "./static/products/04302340500-e1.jpg",
+        "description": "Relaxed fit jacket made in cotton fabric. Featuring a lapel collar and long sleeves with buttoned cuffs. Combined contrasting embroidery on the front and back. Side pockets at the hip. Slightly faded effect. Zip-up fastening at the front.",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "Green",
+            "Black"
+        ]
+    }
+
+}

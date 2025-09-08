@@ -1,0 +1,43 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.env
+
+# Database
+*.db
+bananashop.db
+
+# Generated content
+static/uploads/profile_images/
+static/generated/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# History and temporary files
+.history/
+*.tmp
+*.temp
+
+# Test files
+test_*.py
+*.ipynb
