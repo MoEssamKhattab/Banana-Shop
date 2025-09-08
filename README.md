@@ -1,25 +1,26 @@
-# 🍌 Banana Store — ~~Browser~~ Mirror
+# Banana Store
+~~Browser~~ Mirror
 
 
 > **Built for the Nano Banana Hackathon** - AI-powered e-commerce that shows customers how they look wearing products before purchase.
 
-## 🎯 What Makes Banana Different
+## What Makes Banana Different
 
 **Proactive AI Personalization**: Unlike traditional virtual try-on apps that wait for user requests, Banana automatically generates personalized images as you browse - no manual try-on needed.
 
-- **📸 Traditional**: Static photos → Imagination → Uncertainty
-- **🔄 Virtual Try-On**: Manual requests → Wait → Limited engagement  
-- **🤖 Banana**: Automatic personalization → Instant visualization → Confident purchases
+- **Traditional**: Static photos → Imagination → Uncertainty
+- **Virtual Try-On**: Manual requests → Wait → Limited engagement  
+- **Banana**: Automatic personalization → Instant visualization → Confident purchases
 
-## ✨ Key Features
+## Key Features
 
-- **🤖 Proactive AI**: Automatic image generation using Google GenAI (Gemini 2.5 Flash)
-- **⚡ Real-time Processing**: Background generation with progress indicators
-- **🔐 User Profiles**: JWT authentication with profile image upload
-- **📱 Responsive Design**: Mobile-first, works on all devices
-- **🎨 Modern UI**: Sliding home carousel with curated fashion imagery, hover effects, smooth transitions
+- **Proactive AI**: Automatic image generation using Google GenAI (Gemini 2.5 Flash)
+- **Real-time Processing**: Background generation with progress indicators
+- **User Profiles**: JWT authentication with profile image upload
+- **Responsive Design**: Mobile-first, works on all devices
+- **Modern UI**: Sliding home carousel with curated fashion imagery, hover effects, smooth transitions
 
-## 🚀 Quick Start
+## Quick Start
 
 1. **Clone & Install**:
    ```bash
@@ -41,15 +42,15 @@
 
 4. **Access**: Open `http://localhost:8000`
 
-## 🌍 Expansion Potential
+## Expansion Potential
 
 Banana's proactive personalization can extend beyond fashion:
-- **🏠 Furniture**: Visualize items in your actual space
-- **🚗 Automotive**: Customize vehicles in your environment  
-- **💄 Beauty**: Virtual makeup and styling
-- **📱 Electronics**: Device integration and sizing
+- **Furniture**: Visualize items in your actual space
+- **Automotive**: Customize vehicles in your environment  
+- **Beauty**: Virtual makeup and styling
+- **Electronics**: Device integration and sizing
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: FastAPI, SQLAlchemy, JWT Authentication
 - **AI**: Google Generative AI (Gemini 2.5 Flash Image Preview)
@@ -57,14 +58,14 @@ Banana's proactive personalization can extend beyond fashion:
 - **Database**: SQLite
 - **Package Manager**: UV
 
-## 📋 Assumptions & Disclaimers
+## Assumptions & Disclaimers
 
 - Generated images cached client-side for performance
 - Requires JavaScript and modern browser support
 - Product images and home carousel visuals sourced from Zara.com for demonstration
 - Educational project - not for commercial use without proper licensing
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
